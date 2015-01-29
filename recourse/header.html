@@ -1,0 +1,54 @@
+<div class="navigation-bar bg-texasblue">
+	<div class="navigation-bar-content container">
+		<a href="index.html" class="element">
+			</span>The Alamo Conservation Project<sup>2.0</sup>
+		</a> <span class="element-divider"></span>
+		<a class="element1 pull-menu" href="#"></a>
+		<ul class="element-menu">
+			<li> <a href="index_view.html" class="element">Map </a>
+			</li> <span class="element-divider"></span>
+			<li> <a href="walls.html" class="element">Walls</a>
+			</li>
+			<!--
+<span class="element-divider"></span>
+                 <li>
+                <a href = "pillars.html" class="element">Pillaster</a>
+-->
+			</li><span class="element-divider"></span>
+			<li> <a href="aboutv2.html" class="element">About</a>
+			</li> 
+		</ul>
+		<div class="no-tablet-portrait no-phone">
+			<span class="element-divider place-right"></span>
+			<div class="element place-right">
+				<a class="dropdown-toggle" href="#"> <span class="icon-user"></span><span id="username"> Conservator</a>
+            <ul class="dropdown-menu place-right" data-role="dropdown">
+                <div id="login"><li><a href="login.html">Login</a>
+						</li></div>
+						<div id="logout" style="display: none;">
+
+						<li><a href="php/logout.php">Sign out</a>
+						</li></div>
+
+            </ul>
+        </div>
+        <span class="element-divider place-right"></span>
+		</div>
+		</div>
+	</div>
+	<script>
+		$.ajax({
+			type: "post",
+			url: "php/validate.php",
+			dataType: "text",
+			complete: function (data) {
+				console.log(data.responseText);
+				if (data.responseText === "0") {} else {
+					if (data.responseText === "1") {
+						$("#login").hide();
+						$("#logout").show();
+					}
+				}
+			},
+		})
+	</script>

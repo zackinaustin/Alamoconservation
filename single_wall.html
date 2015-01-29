@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="/AlamoConservation/v3.0.0/build/ol.js" type="text/javascript"></script>
+	<script src="/AlamoConservation/js/jquery/jquery.min.js" type="text/javascript"></script>
+	<script src="/AlamoConservation//js/jquery/jquery.widget.min.js"></script>
+	<script src="/AlamoConservation/js/metro/metro-loader.js"></script>
+	<script src="/AlamoConservation/js/docs.js"></script>
+	<link rel="stylesheet" href="/AlamoConservation/css/metro-bootstrap.css">
+	<link rel="stylesheet" href="/AlamoConservation/css/docs.css">
+	<link href="/AlamoConservation/css/metro-bootstrap-responsive.css" rel="stylesheet">
+	<script src="zoomifyv6.js" type="text/javascript"></script>
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date();
+			a = s.createElement(o),
+			m = s.getElementsByTagName(o)[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-56887702-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+	<link rel="stylesheet" href="/AlamoConservation/v3.0.0/css/ol.css" type="text/css">
+	<style type="text/css">
+		.map {
+			padding-top: 5px;
+			width: 100%;
+			height: 90%;
+			background-color: #ffffff;
+		}
+		#popup-content {
+			width: 260px;
+			bottom: 12px;
+			left: -50px;
+			background-color: white;
+			padding-left: 10px;
+			padding-right: 10px;
+			border-color: black;
+			border-style: solid;
+			border-width: medium;
+		}
+		#pop {
+			width: 150px;
+			bottom: 12px;
+			left: -50px;
+			background-color: white;
+			border-style: solid;
+			border-width: medium;
+			border-color: black;
+		}
+		.ol-popup-closer {
+			text-decoration: none;
+			position: absolute;
+			top: 8px;
+			right: 8px;
+		}
+		.ol-popup-closer: after {
+			content: "X";
+		}
+		#controlpanel{
+			width: 230px;
+			top:50px;
+			right:0px;
+			position: fixed;
+			background-color: white;
+		}
+		
+	</style>
+	<title>Index Map</title>
+</head>
+
+<body class="metro">
+	<header class="bg-emerald" data-load="recourse/header.html"></header>
+	
+		
+			
+				<div id="map" class="map"></div>
+				
+				<div id="popup-content">	
+					<a href="#" id="popup-closer" class="ol-popup-closer ">X</a>
+					<form id="form" action="#" method="post">
+						<legend>Add Feature</legend>
+						<div class="input-control select size2 type-control" id="type-control">
+							<lable>Type</lable>
+							<select id="type">
+								<option value="Select" id="option_default">Select</option>
+								<option class="type_option" value="Wood">Wood</option>
+								<option class="type_option" value="Nail">Nail</option>
+								<option class="type_option" value="Grafitti">Grafitti</option>
+								<option class="type_option" value="Incised Lines">Incised Lines</option>
+								<option class="type_option" value="Efflorescence">Efflorescence</option>
+								<option class="type_option" value="Pigment">Pigment</option>
+							</select>
+						</div>
+						<div class="input-control select size2 color-control" style="display:none">
+							<lable>Color</lable>
+							<select id="color">
+								<option value="Green">Green</option>
+								<option value="Red">Red</option>
+								<option value="Yellow">Yellow</option>
+								<option value="Blue">Blue</option>
+								<option value="Black">Black</option>
+							</select>
+						</div>
+						<br>
+						<div class="input-control select size2 actor-control" style="display:none">
+							<lable>Actor</lable>
+							<select id="actor">
+								<option value="US Army">US Army</option>
+								<option value="Spanish Colonials">Spanish Colonials</option>
+							</select>
+						</div>
+						<br>
+						<br> <span class="btn btn-success fileinput-button">
+									 	<i class="glyphicon glyphicon-plus"></i>
+									 		<span>Add files...</span>
+						<!-- The file input field used as target for the file upload widget -->
+						<input id="fileupload" type="file" name="files[]" multiple>
+						</span>
+						<!-- The global progress bar -->
+						<!-- The container for the uploaded files -->
+						<div id="files" class="files"></div>
+						<br>
+						<lable>Created at</lable>
+						<div class="input-control text" data-role="datepicker" data-date="1900-11-01" data-format="mm/dd/yyyy" data-position="top|bottom" data-effect="none|slide|fade" style="width: 60%">
+							<input type="text" id="initialDate">	<span class="btn-date"></span>
+						</div>
+						<lable>Found at</lable>
+						<div class="input-control text" data-role="datepicker" data-date="2014-11-01" data-format="mm/dd/yyyy" data-position="top|bottom" data-effect="none|slide|fade" style="width: 60%">
+							<input type="text" id="foundDate"><span class="btn-date"></span>
+						</div>
+						<label>Notes</label>
+						<div class="input-control textarea success-state " data-role="input-control">
+							<textarea id="note"></textarea>
+						</div>	<a href="#" class="button" id="yes" style="background-color: #247b04;color: white;">Submit</a>
+						<!-- 	<button href="#"id="yes" class="button">yes</button> -->	<a href="#" class="button" id="cancel" style="background-color: #247b04;color: white;">Cancel</a>
+					</form>
+				</div>
+				<div id="pop">	<span id="diswall"></span>
+					<lable class="strong">Type:</lable><span id="distype"></span>
+					<div id="forpigment" style="display:none">
+						<lable class="strong">Color:</lable><span id="discolor"></span>
+						<lable class="strong">Actor:</lable><span id="disactor"></span>
+					</div>
+					<br>
+					<div id="disfiles">
+						<lable class="strong">Attachment:</lable>
+						<br>
+						<a id="disfile" href="#"></a>
+					</div>
+				</div>
+				<div class="panel" data-role="panel" id="controlpanel">
+					<div class="panel-header bg-darkRed fg-white">Action</div>
+					<div class="panel-content" style="display: block;"> <span id="mouse-position">&nbsp;</span>
+													<div>
+								<label>Interaction type: &nbsp;</label>
+								<div>
+									<div class="input-control radio default-style" data-role="input-control" id="ratio1">
+										<label>
+											<input type="radio" name="interaction_type" id="interaction_type_draw" value="draw" checked> <span class="check"></span>Add &nbsp; &nbsp; &nbsp;</label>
+									</div>
+									<div class="input-control radio  default-style" data-role="input-control">
+										<label>
+											<input type="radio" id="interaction_type_modify" name="interaction_type" value="select"> <span class="check"></span>
+											Select</label>
+									</div>
+								</div>
+							</div>
+							<div>
+								<label>Feature Shape</label>
+								<select id="geom_type">
+									<option value="Point" selected>Point</option>
+									<option value="LineString">Line</option>
+									<option value="Polygon">Polygon</option>
+								</select>
+							</div>
+							<select id="data_type" style="display: none">
+								<option value="GeoJSON" selected>GeoJSON</option>
+								<option value="KML">KML</option>
+								<option value="GPX">GPX</option>
+							</select>
+							<div id="delete" style="text-decoration:underline;cursor:pointer">Delete all features</div>
+							
+						</div>
+					
+			
+	<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+	<script src="js/fileUpload/vendor/jquery.ui.widget.js"></script>
+	<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+	<script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+	<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+	<script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+	<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
+	<!-- <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+	<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+	<script src="js/fileUpload/jquery.iframe-transport.js"></script>
+	<!-- The basic File Upload plugin -->
+	<script src="js/fileUpload/jquery.fileupload.js"></script>
+	<!-- The File Upload processing plugin -->
+	<script src="js/fileUpload/jquery.fileupload-process.js"></script>
+	<!-- The File Upload image preview & resize plugin -->
+	<script src="js/fileUpload/jquery.fileupload-image.js"></script>
+	<!-- The File Upload audio preview plugin -->
+	<script src="js/fileUpload/jquery.fileupload-audio.js"></script>
+	<!-- The File Upload video preview plugin -->
+	<script src="js/fileUpload/jquery.fileupload-video.js"></script>
+	<!-- The File Upload validation plugin -->
+	<script src="js/fileUpload/jquery.fileupload-validate.js"></script>
+</body>
+
+</html>
